@@ -27,7 +27,6 @@ const Admin = ({ onLogout }) => {
 
       </Routes>
 
-      <button onClick={handleLogout}>Logout</button>
 
     </>
   )

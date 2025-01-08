@@ -1,34 +1,19 @@
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import {Image} from 'antd'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Image } from "antd";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ProductTable = () => {
-
-  // const products = [
-  //   { id: 1, name: "Laptop", category: "Electronics", price: "$1000" },
-  //   { id: 2, name: "Smartphone", category: "Electronics", price: "$500" },
-  //   { id: 3, name: "Shoes", category: "Fashion", price: "$80" },
-  //   { id: 4, name: "ABC", category: "BJF", price: "$1000" },
-  //   { id: 5, name: "Smartphone", category: "Electronics", price: "$500" },
-  //   { id: 6, name: "Shoes", category: "Fashion", price: "$80" },
-  //   { id: 7, name: "Laptop", category: "Electronics", price: "$1000" },
-  //   { id: 8, name: "Smartphone", category: "Electronics", price: "$500" },
-  //   { id: 9, name: "Shoes", category: "Fashion", price: "$80" },
-  //   // Add more products as needed
-  // ];
   const [products, setProducts] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredProducts = products.filter((product) =>
     product.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-  
   const fetchProducts = async () => {
-    const res = await axios.get('http://localhost:8082/productsDis');
+    const res = await axios.get("http://localhost:8082/productsDis");
     setProducts(res.data);
   };
 
@@ -36,12 +21,66 @@ const ProductTable = () => {
     fetchProducts();
   }, []);
 
-  
-    return (
-      <div className="container mx-auto p-6">
-      {/* <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Add a title
+    doc.setFontSize(18);
+    doc.text("Product Report", 14, 22);
+
+    // Add some extra content
+    doc.setFontSize(12);
+    doc.text(
+      `Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+      14,
+      30
+    );
+    doc.text("This report contains detailed product information.", 14, 36);
+
+    // Prepare table data
+    const tableColumn = [
+      "ID",
+      "Name",
+      "Scientific Name",
+      "Classification",
+      "Size",
+      "Weight",
+      "Price",
+      "Skin Color",
+      "Other Info",
+    ];
+
+    const tableRows = filteredProducts.map((product) => [
+      product.id,
+      product.Name,
+      product.Scientific_Name,
+      product.Classification,
+      product.Size,
+      product.Weight,
+      product.Price,
+      product.Skin_Color,
+      product.Others_Info,
+    ]);
+
+    // Generate table
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 40,
+      theme: "grid",
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    // Save the PDF
+    doc.save("product_report.pdf");
+  };
+
+  return (
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Product Table
-      </h2> */}
+      </h2>
 
       {/* Search Input */}
       <div className="flex justify-center mb-6">
@@ -54,9 +93,11 @@ const ProductTable = () => {
         />
       </div>
 
+      
+
       {/* Product Table */}
       <div className="overflow-y-auto max-h-96 rounded-lg shadow-lg border border-gray-200">
-        <table  className="min-w-full bg-white">
+        <table className="min-w-full bg-white">
           <thead>
             <tr className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
               <th className="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wider">
@@ -103,11 +144,11 @@ const ProductTable = () => {
                   {product.id}
                 </td>
                 <td className="py-3 px-6 text-gray-800 font-medium">
-                <Image className="h-20 w-20 object-contain rounded-2xl"
-                              width={50}
-                              src={`data:${product.mimeType};base64,${product.image}`}
-                            />
-                 
+                  <Image
+                    className="h-20 w-20 object-contain rounded-2xl"
+                    width={50}
+                    src={`data:${product.mimeType};base64,${product.image}`}
+                  />
                 </td>
                 <td className="py-3 px-6 text-gray-800 font-medium">
                   {product.Name}
@@ -125,10 +166,10 @@ const ProductTable = () => {
                   {product.Weight}
                 </td>
                 <td className="py-3 px-6 text-gray-800 font-medium">
-                  {product.Skin_Color}
+                  {product.Price}
                 </td>
                 <td className="py-3 px-6 text-gray-800 font-medium">
-                  {product.Price}
+                  {product.Skin_Color}
                 </td>
                 <td className="py-3 px-6 text-gray-800 font-medium">
                   {product.Others_Info}
@@ -137,10 +178,17 @@ const ProductTable = () => {
             ))}
           </tbody>
         </table>
+      </div>{/* Download PDF Button */}
+      <div className="flex justify-center mb-4 mt-4 text-center ">
+        <button
+          onClick={generatePDF}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
+        >
+          Download PDF
+        </button>
       </div>
     </div>
-    );
-  };
-  
-  export default ProductTable;
-  
+  );
+};
+
+export default ProductTable;

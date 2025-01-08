@@ -104,12 +104,6 @@ app.put("/update-user/:id", (req, res) => {
 
 
 
-
-
-
-
-
-
 // ********** used for animals ######################
 // Animals id generated
 app.get('/getAnimalsId', (req, res) => {
@@ -197,7 +191,8 @@ const { id } = req.params;
   });
 });
 
-// Endpoint to delete an animal by ID
+
+// Endpoint to delete an animal by ID id
 app.delete('/animalsDelete/:id', (req, res) => {
     const { id } = req.params;
   
@@ -211,10 +206,10 @@ app.delete('/animalsDelete/:id', (req, res) => {
       if (result.affectedRows === 0) {
         return res.status(404).json({ message: 'Animal not found' });
       }
-  
+   
       res.json({ message: 'Animal deleted successfully' });
     });
-  });
+});
 
 
 

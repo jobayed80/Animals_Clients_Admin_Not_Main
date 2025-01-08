@@ -282,39 +282,24 @@ const Nav = ({ search, setSearch, searchproduct, onLogout }) => {
               </li>
               <li onClick={() => handleLinkClick('Cart')} className="relative">
                 <Link
-                  to="/cart"
+                  to="/contact"
                   className={`link text-white px-3 py-2 rounded-md hover:bg-gray-700 ${
                     activeLink === 'Cart' ? 'bg-gray-400 font-bold' : ''
                   }`}
                 >
-                  Cart
+                  Contact
                 </Link>
                 {activeLink === 'Cart' && (
                   <div className="absolute bottom-0 left-0 w-full h-1 bg-rose-400"></div>
                 )}
               </li>
-              <li onClick={() => handleLinkClick('About')} className="relative">
-                <Link
-                  to="/about"
-                  className={`link text-white px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    activeLink === 'About' ? 'bg-gray-400 font-bold' : ''
-                  }`}
-                >
-                  Contact
-                </Link>
-                {activeLink === 'About' && (
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-rose-400"></div>
-                )}
-              </li>
+             
               <li onClick={() => handleLinkClick('Contact')} className="relative">
-                <Link
-                  to="/contact"
-                  className={`link text-white px-3 py-2 rounded-md hover:bg-gray-700 ${
-                    activeLink === 'Contact' ? 'bg-gray-400 font-bold' : ''
-                  }`}
+                <button
+                  onClick={handleLogout}
                 >
-                  Contact
-                </Link>
+                  Logout
+                </button>
                 {activeLink === 'Contact' && (
                   <div className="absolute bottom-0 left-0 w-full h-1 bg-rose-400"></div>
                 )}

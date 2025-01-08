@@ -5,7 +5,7 @@ const Nav = ({ onToggleSidebar, onToggleDarkMode, darkMode }) => {
 
 
   return (
-    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center ">
       <button
         className="md:hidden bg-gray-800 text-white p-2 rounded"
         onClick={onToggleSidebar}
